@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swipe &amp; Keyboard Pages</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent accidental scrolling */
+    }
+    .container {
+      display: flex; /* Arrange pages side-by-side */
+      width: 200vw; /* Make container twice the viewport width */
+      transition: transform 0.5s ease-in-out; /* Smooth transition */
+    }
+    .page {
+      flex: 1; /* Make each page occupy half the width */
+      height: 100vh; /* Set page height to viewport height */
+      text-align: center;
+      padding: 20px;
+    }
+    .page:nth-child(1) { /* Style for first page */
+      background-color: #f0f0f0;
+    }
+    .page:nth-child(2) { /* Style for second page */
+      background-color: #d0d0d0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container" style="transform: translateX(0vw);">
+    <div class="page" id="page1">
+      <h1>This is Page 1</h1>
+    </div>
+    <div class="page" id="page2">
+      <h1>This is Page 2</h1>
+    </div>
+  </div>
+  <script>
+    const container = document.getElementById('container');
+    let currentX = 0; // Store current touch position
+    let currentPage = 1; // Track current page
+
+    container.addEventListener('touchstart', (event) => {
+      currentX = event.touches[0].clientX; // Get initial touch position
+    });
+
+    container.addEventListener('touchmove', (event) => {
+      const diffX = event.touches[0].clientX - currentX; // Calculate swipe distance
+
+      // Check if swipe is left (positive) and greater than a threshold (e.g., 50px)
+      if (diffX > 50) {
+        changePage(currentPage - 1); // Move to previous page on left swipe
+      } else if (diffX < -50) {
+        changePage(currentPage + 1); // Move to next page on right swipe
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        changePage(currentPage - 1); // Move to previous page on left arrow key
+      } else if (event.key === 'ArrowRight') {
+        changePage(currentPage + 1); // Move to next page on right arrow key
+      }
+    });
+
+    function changePage(newPage) {
+      if (newPage > 0 && newPage <= 2) { // Check for valid page numbers
+        currentPage = newPage;
+        container.style.transform = `translateX(-${(currentPage - 1) * 100}vw)`;
+      }
+    }
+  </script>
+
+
+</body></html>
